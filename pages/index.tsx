@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { MouseEventHandler } from "react";
 import Head from "next/head";
-import { RandomFox } from "@components/RandomFox";
+import { LazyImage } from "@components/LazyImage";
 
 type ImageItem = {
   id: string;
@@ -15,7 +15,7 @@ export default function Home() {
   const random = () => Math.floor(Math.random() * 123) + 1;
 
   const [images, setImages] = useState<Array<ImageItem>>([]);
-  const [heightImg, setHeightImg] = useState<string>("h-screen");
+  const [heightScreen, setheightScreen] = useState<string>("h-screen");
   const [count, setCount] = useState(0);
 
   const addNewFox: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -25,8 +25,8 @@ export default function Home() {
       url: `https://randomfox.ca/images/${random()}.jpg`,
     };
     setImages([...images, newImageItem]);
-    if (count >= 0) {
-      setHeightImg("h-full");
+    if (count >= 2) {
+      setheightScreen("h-full");
     }
     console.log(count);
   };
@@ -38,7 +38,7 @@ export default function Home() {
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
       </Head>
       <div
-        className={`${heightImg} m-1 border-2 border-orange-800 rounded-lg shadow-lg bg-gradient-to-r from-yellow-50 via-orange-50 to-red-100 shadow-orange-800`}
+        className={`${heightScreen} m-1 border-2 border-orange-800 rounded-lg shadow-lg bg-gradient-to-r from-yellow-50 via-orange-50 to-red-100 shadow-orange-800`}
       >
         <main className="grid justify-center grid-cols-12 ">
           <h1 className="col-span-6 col-start-4 my-4 text-3xl font-bold text-center">
@@ -46,12 +46,20 @@ export default function Home() {
           </h1>
           <button
             onClick={addNewFox}
-            className="h-16 col-span-2 col-start-6 py-2 my-4 text-xl font-bold bg-orange-200 border-2 border-yellow-800 rounded-lg shadow-lg shadow-yellow-900"
+            className="h-16 col-span-4 col-start-5 py-2 my-4 text-xl font-bold bg-orange-200 border-2 border-yellow-800 rounded-lg shadow-lg lg:col-span-2 lg:col-start-6 shadow-yellow-900"
           >
             Add new Fox
           </button>
-          {images.map(({ id, url }) => (
-            <RandomFox key={id} image={url} alt={"fox image"} />
+          {images.map(({ id, url }, index) => (
+            <LazyImage
+              key={id}
+              src={url}
+              className="w-4/5 h-auto col-span-6 col-start-4 my-4 border-2 border-yellow-800 rounded-lg shadow-lg lg:col-span-4 lg:col-start-5 justify-self-center shadow-yellow-900"
+              alt={"fox-image"}
+              onLazyLoad={(img) => {
+                console.log(`Image #${index + 1} cargada. Nodo:`, img);
+              }}
+            />
           ))}
         </main>
         <footer className="p-4 text-xl italic font-bold text-center text-orange-800">
