@@ -3,10 +3,6 @@ import type { MouseEventHandler } from "react";
 import Head from "next/head";
 import { LazyImage } from "@components/LazyImage";
 
-type ImageItem = {
-  id: string;
-  url: string;
-};
 let count = 0;
 //generate simple unique id
 const generateId = () => Math.random().toString(36).substring(2, 9);
@@ -14,13 +10,13 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 export default function Home() {
   const random = () => Math.floor(Math.random() * 123) + 1;
 
-  const [images, setImages] = useState<Array<ImageItem>>([]);
+  const [images, setImages] = useState<Array<TImageItem>>([]);
   const [heightScreen, setheightScreen] = useState<string>("h-screen");
   const [count, setCount] = useState(0);
 
   const addNewFox: MouseEventHandler<HTMLButtonElement> = (event) => {
     setCount(count + 1);
-    const newImageItem: ImageItem = {
+    const newImageItem: TImageItem = {
       id: generateId(),
       url: `https://randomfox.ca/images/${random()}.jpg`,
     };
